@@ -1,0 +1,7 @@
+starcut-app/
+├── lib/
+│   └── main.dart   ← PUT THE FLUTTER CODE HERE
+├── pubspec.yaml
+├── android/
+├── ios/
+└── README.md       ← Don't put the main app code here
