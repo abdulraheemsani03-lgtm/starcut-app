@@ -1,6 +1,972 @@
 starcut-app/
 ├── lib/
-│   └── main.dart   ← PUT THE FLUTTER CODE HERE
+│   └── main.dart(import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const StarCutApp());
+}
+
+class StarCutApp extends StatelessWidget {
+  const StarCutApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'StarCut',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF09090D),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF7C4DFF),
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      home: const StarCutHome(),
+    );
+  }
+}
+
+class StarCutHome extends StatefulWidget {
+  const StarCutHome({super.key});
+
+  @override
+  State<StarCutHome> createState() => _StarCutHomeState();
+}
+
+class _StarCutHomeState extends State<StarCutHome> {
+  int selectedIndex = 0;
+
+  final List<Map<String, dynamic>> templates = [
+    {
+      'title': 'Viral Beat',
+      'subtitle': 'Fast & energetic',
+      'icon': Icons.music_note,
+    },
+    {
+      'title': 'Cinematic',
+      'subtitle': 'Smooth transitions',
+      'icon': Icons.movie_filter,
+    },
+    {
+      'title': 'Birthday',
+      'subtitle': 'Celebrate moments',
+      'icon': Icons.cake,
+    },
+    {
+      'title': 'Business Ad',
+      'subtitle': 'Promote your brand',
+      'icon': Icons.campaign,
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: IndexedStack(
+          index: selectedIndex,
+          children: [
+            _homePage(),
+            _projectsPage(),
+            _templatesPage(),
+            _profilePage(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: const Color(0xFF111117),
+        indicatorColor: const Color(0xFF2A2048),
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.video_library_outlined),
+            selectedIcon: Icon(Icons.video_library),
+            label: 'Projects',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.auto_awesome_outlined),
+            selectedIcon: Icon(Icons.auto_awesome),
+            label: 'Templates',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _homePage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFF7C4DFF),
+                      Color(0xFFB388FF),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Icon(
+                  Icons.star_rounded,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'StarCut',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Create. Edit. Shine.',
+                      style: TextStyle(
+                        color: Colors.white54,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  _showMessage('Notifications coming soon');
+                },
+                icon: const Icon(Icons.notifications_none),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 28),
+
+          const Text(
+            'Create something amazing ✨',
+            style: TextStyle(
+              fontSize: 27,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          const Text(
+            'Turn your photos and videos into beautiful content.',
+            style: TextStyle(
+              color: Colors.white60,
+              fontSize: 15,
+            ),
+          ),
+
+          const SizedBox(height: 22),
+
+          Row(
+            children: [
+              Expanded(
+                child: _createButton(
+                  icon: Icons.video_call_rounded,
+                  title: 'New Video',
+                  onTap: () => _openEditor('New Video'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _createButton(
+                  icon: Icons.image_rounded,
+                  title: 'Photo Video',
+                  onTap: () => _openEditor('Photo Video'),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 28),
+
+          _sectionTitle(
+            'Quick Tools',
+            'See all',
+            () {
+              _showMessage('More editing tools coming soon');
+            },
+          ),
+
+          const SizedBox(height: 14),
+
+          SizedBox(
+            height: 105,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _toolCard(
+                  Icons.content_cut,
+                  'Trim',
+                  const Color(0xFF4CAF50),
+                ),
+                _toolCard(
+                  Icons.text_fields,
+                  'Text',
+                  const Color(0xFF2196F3),
+                ),
+                _toolCard(
+                  Icons.music_note,
+                  'Music',
+                  const Color(0xFFE91E63),
+                ),
+                _toolCard(
+                  Icons.auto_awesome,
+                  'Effects',
+                  const Color(0xFFFF9800),
+                ),
+                _toolCard(
+                  Icons.speed,
+                  'Speed',
+                  const Color(0xFF9C27B0),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 28),
+
+          _sectionTitle(
+            'Popular Templates',
+            'View all',
+            () {
+              setState(() {
+                selectedIndex = 2;
+              });
+            },
+          ),
+
+          const SizedBox(height: 14),
+
+          SizedBox(
+            height: 170,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: templates.length,
+              itemBuilder: (context, index) {
+                final template = templates[index];
+
+                return GestureDetector(
+                  onTap: () {
+                    _openEditor(template['title']);
+                  },
+                  child: Container(
+                    width: 145,
+                    margin: const EdgeInsets.only(right: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          _templateColor(index),
+                          const Color(0xFF15151D),
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            template['icon'],
+                            size: 32,
+                            color: Colors.white,
+                          ),
+                          const Spacer(),
+                          Text(
+                            template['title'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            template['subtitle'],
+                            style: const TextStyle(
+                              color: Colors.white60,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          const SizedBox(height: 28),
+
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(22),
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF24154D),
+                  Color(0xFF17121F),
+                ],
+              ),
+              border: Border.all(
+                color: const Color(0xFF7C4DFF).withOpacity(.35),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Go Premium ⭐',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 7),
+                      Text(
+                        'Unlock premium effects, templates and exports.',
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _showMessage('Premium features coming soon');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF7C4DFF),
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Upgrade'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _projectsPage() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'My Projects',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Your saved StarCut creations',
+            style: TextStyle(color: Colors.white54),
+          ),
+          const SizedBox(height: 30),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF17171F),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: const Icon(
+                      Icons.video_library_outlined,
+                      size: 45,
+                      color: Color(0xFF7C4DFF),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'No projects yet',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Create your first video with StarCut.',
+                    style: TextStyle(color: Colors.white54),
+                  ),
+                  const SizedBox(height: 22),
+                  ElevatedButton.icon(
+                    onPressed: () => _openEditor('New Project'),
+                    icon: const Icon(Icons.add),
+                    label: const Text('Create Project'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF7C4DFF),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 22,
+                        vertical: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _templatesPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Templates',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Start creating faster with ready-made styles.',
+            style: TextStyle(color: Colors.white54),
+          ),
+          const SizedBox(height: 24),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: templates.length,
+            gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+              childAspectRatio: .9,
+            ),
+            itemBuilder: (context, index) {
+              final template = templates[index];
+
+              return GestureDetector(
+                onTap: () => _openEditor(template['title']),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        _templateColor(index),
+                        const Color(0xFF111118),
+                      ],
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        template['icon'],
+                        size: 38,
+                      ),
+                      const Spacer(),
+                      Text(
+                        template['title'],
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        template['subtitle'],
+                        style: const TextStyle(
+                          color: Colors.white60,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const Row(
+                        children: [
+                          Text(
+                            'Use template',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Icon(Icons.arrow_forward, size: 16),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _profilePage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Container(
+            width: 90,
+            height: 90,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF7C4DFF),
+                  Color(0xFFB388FF),
+                ],
+              ),
+            ),
+            child: const Icon(
+              Icons.person,
+              size: 50,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 15),
+          const Text(
+            'StarCut Creator',
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            'Create amazing content',
+            style: TextStyle(color: Colors.white54),
+          ),
+          const SizedBox(height: 35),
+          _settingsTile(
+            Icons.person_outline,
+            'Edit Profile',
+          ),
+          _settingsTile(
+            Icons.settings_outlined,
+            'Settings',
+          ),
+          _settingsTile(
+            Icons.help_outline,
+            'Help & Support',
+          ),
+          _settingsTile(
+            Icons.info_outline,
+            'About StarCut',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _createButton({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 125,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF7C4DFF),
+              Color(0xFF512DA8),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(icon, size: 30),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _toolCard(
+    IconData icon,
+    String title,
+    Color color,
+  ) {
+    return Container(
+      width: 90,
+      margin: const EdgeInsets.only(right: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF15151C),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: color,
+            size: 30,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionTitle(
+    String title,
+    String action,
+    VoidCallback onTap,
+  ) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: onTap,
+          child: Text(
+            action,
+            style: const TextStyle(
+              color: Color(0xFFB388FF),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _settingsTile(
+    IconData icon,
+    String title,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF15151C),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: const Color(0xFFB388FF),
+        ),
+        title: Text(title),
+        trailing: const Icon(
+          Icons.chevron_right,
+          color: Colors.white38,
+        ),
+        onTap: () {
+          _showMessage('$title coming soon');
+        },
+      ),
+    );
+  }
+
+  Color _templateColor(int index) {
+    const colors = [
+      Color(0xFF6A1B9A),
+      Color(0xFF1565C0),
+      Color(0xFFC62828),
+      Color(0xFF00695C),
+    ];
+
+    return colors[index % colors.length];
+  }
+
+  void _openEditor(String name) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StarCutEditor(projectName: name),
+      ),
+    );
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+}
+
+class StarCutEditor extends StatefulWidget {
+  final String projectName;
+
+  const StarCutEditor({
+    super.key,
+    required this.projectName,
+  });
+
+  @override
+  State<StarCutEditor> createState() => _StarCutEditorState();
+}
+
+class _StarCutEditorState extends State<StarCutEditor> {
+  double videoPosition = 0.35;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF08080C),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF0D0D12),
+        title: Text(
+          widget.projectName,
+          style: const TextStyle(fontSize: 17),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Your video is ready to export!'),
+                ),
+              );
+            },
+            child: const Text(
+              'Export',
+              style: TextStyle(
+                color: Color(0xFFB388FF),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 5,
+            child: Container(
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF15151C),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.movie_creation_outlined,
+                      size: 70,
+                      color: Color(0xFF7C4DFF),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      'Your video preview',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Add media to start editing',
+                      style: TextStyle(
+                        color: Colors.white54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                Slider(
+                  value: videoPosition,
+                  onChanged: (value) {
+                    setState(() {
+                      videoPosition = value;
+                    });
+                  },
+                  activeColor: const Color(0xFF7C4DFF),
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '00:00',
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                    Text(
+                      '00:15',
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 15),
+
+          Container(
+            height: 120,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 10,
+            ),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _editorTool(Icons.add, 'Media'),
+                _editorTool(Icons.content_cut, 'Trim'),
+                _editorTool(Icons.music_note, 'Music'),
+                _editorTool(Icons.text_fields, 'Text'),
+                _editorTool(Icons.auto_awesome, 'Effects'),
+                _editorTool(Icons.speed, 'Speed'),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 5, 16, 20),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Media picker will be connected next.',
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add_photo_alternate),
+                label: const Text('Add Photos & Videos'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF7C4DFF),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _editorTool(
+    IconData icon,
+    String title,
+  ) {
+    return Container(
+      width: 75,
+      margin: const EdgeInsets.only(right: 8),
+      child: Column(
+        children: [
+          Container(
+            width: 55,
+            height: 55,
+            decoration: BoxDecoration(
+              color: const Color(0xFF17171F),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Icon(
+              icon,
+              color: const Color(0xFFB388FF),
+            ),
+          ),
+          const SizedBox(height: 7),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 11),
+          ),
+        ],
+      ),
+    );
+  }
+})   ← PUT THE FLUTTER CODE HERE
 ├── pubspec.yaml
 ├── android/
 ├── ios/
