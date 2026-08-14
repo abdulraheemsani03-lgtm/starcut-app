@@ -966,8 +966,8 @@ class _StarCutEditorState extends State<StarCutEditor> {
       ),
     );
   }
-})   ← PUT THE FLUTTER CODE HERE
+})  
 ├── pubspec.yaml
 ├── android/
 ├── ios/
-└── README.md       ← Don't put the main app code here
+└── README.md      
